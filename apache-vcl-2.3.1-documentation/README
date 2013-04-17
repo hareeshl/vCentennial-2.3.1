@@ -1,0 +1,160 @@
+For installation, please see the INSTALLATION file or the install guide at the
+Apache VCL site (http://vcl.apache.org/docs/installation.html). This file is
+only a list of requirements, which are also stated in the install guide.
+
+System Requirements:
+
+Web Frontend:
+Apache HTTP Server v1.3 or v2.x with SSL enabled
+php 5.0 or later
+php modules (some of these may be built in for your distro):
+- php-gd
+- php-json
+- php-mysql
+- php-openssl
+- php-sysvsem
+- php-xml
+- php-xmlrpc
+- php-gettext
+- php-ldap (if you will be using ldap authentication)
+- php-process (for RHEL/CentOS 6)
+
+Database:
+MySQL 5.0 or later
+
+Management Node Backend:
+Operating system - Tested on CentOS 5.x, CentOS 6.x, RedHat Enterprise Linux
+5.x, Red Hat Enterprise Linux 6.x
+
+Packages:
+- expat-devel
+- gcc
+- krb5-libs
+- krb5-devel
+- libxml2-devel
+- make
+- nmap
+- openssl-devel
+- perl-Archive-Tar
+- perl-CPAN
+- perl-DBD-MySQL
+- perl-DBI
+- perl-Digest-SHA1
+- perl-IO-String
+- perl-MailTools
+- perl-Net-Netmask
+- perl-Net-SSH-Expect
+- perl-RPC-XML
+- perl-Text-CSV_XS
+- perl-XML-Simple
+- perl-YAML
+- xmlsec1-openssl
+- MySQL 5 client
+- OpenSSH client
+- Perl 5.8.x
+
+Management Node Perl Modules:
+The Perl modules listed below are available from CPAN (www.cpan.org) and are
+distributed under one or more of the following licenses:
+- The "Artistic License"
+- GNU General Public License (GPL)
+- GNU Library or "Lesser" General Public License (LGPL)
+
+Some of the required Perl modules may be built into your distribution. A script
+is provided which attempts to install the Perl modules. See the "Installing
+Required Perl modules" section of the INSTALLATION file.
+
+- Crypt-SSLeay  
+  http://search.cpan.org/dist/Crypt-SSLeay/
+  License: Perl Artistic & GPL
+- DBI  
+  http://search.cpan.org/dist/DBI/
+  License: Perl Artistic & GPL
+- Devel-StackTrace  
+  http://search.cpan.org/dist/Devel-StackTrace/
+  License: Perl Artistic & GPL
+- Exception-Class  
+  http://search.cpan.org/dist/Exception-Class/
+  License: Perl Artistic & GPL
+- HTML-Parser  
+  http://search.cpan.org/dist/HTML-Parser/
+  License: Perl Artistic & GPL
+- IO-Compress  
+  http://search.cpan.org/dist/IO-Compress/
+  License: Perl Artistic & GPL
+- libwww-perl  
+  http://search.cpan.org/dist/libwww-perl/
+  License: Perl Artistic & GPL
+- MailTools  
+  http://search.cpan.org/dist/MailTools/
+  License: Perl Artistic & GPL
+- Object-InsideOut  
+  http://search.cpan.org/dist/Object-InsideOut/
+  License: Perl Artistic & GPL
+- RPC-XML  
+  http://search.cpan.org/dist/RPC-XML/
+  License: Perl Artistic & LGPL
+- Scalar-List-Utils 
+  http://search.cpan.org/dist/Scalar-List-Utils
+  License: Perl Artistic & GPL
+- XML-Parser  
+  http://search.cpan.org/dist/XML-Parser/
+  License: Perl Artistic & GPL
+- YAML  
+  http://search.cpan.org/dist/YAML/
+  License: Perl Artistic & GPL
+- URI  
+  http://search.cpan.org/dist/URI/
+  License: Perl Artistic & GPL
+- Digest-SHA1 
+  http://search.cpan.org/dist/Digest-SHA1/
+  License: Perl Artistic & GPL
+
+Management Node Backend Conditional System Requirements:
+- Bare-metal and virtual machine provisioning Both bare-metal and virtual
+  machine provisioning require a DHCP server running on the management node
+  listening on the private network.
+- Bare-metal provisioning
+  If you want to provision bare-metal or physical computers such as blades, you
+  will need xCAT configured and working. This release supports either xCAT 1.3
+  or xCAT 2.x. Image capture support using xCAT 2.x is an add on feature. To
+  enable imaging for xCAT2.X See adding support for partimage and partimage-ng
+  to xCAT 2.x in the VCL wiki. 
+- VMware virtual machine provisioning
+  The VMware vSphere SDK for Perl is required in order to provision virtual machines on
+  VMware ESX or VMware ESXi without SSH enabled or on vCenter. It can be
+  obtained from http://www.vmware.com/support/developer/viperltoolkit.
+- Windows XP/2003
+  The Sysprep utility is required in order to provision bare-metal Windows XP or
+  Windows Server 2003 images. It can be downloaded from
+  http://www.microsoft.com.
+- Jabber Instant Message Notification (optional)
+  VCL has the ability to send instant message notifications using Jabber. This
+  feature is optional and can be enabled or disabled by configuring the
+  "jabber=[yes|no]" property in the vcld.conf file. If Jabber notification
+  feature is enabled, the following Perl modules need to be installed:
+  - Net-Jabber
+    http://search.cpan.org/dist/Net-Jabber/
+    License: Perl Artistic and GPL
+  - Net-XMPP
+    http://search.cpan.org/dist/Net-XMPP/
+    License: LGPL
+  - Module-Build
+    http://search.cpan.org/dist/Module-Build/
+    License: Perl Artistic and GPL
+  - XML-Stream
+    http://search.cpan.org/dist/XML-Stream/
+    License: Perl Artistic and GPL
+  - Authen-SASL
+    http://search.cpan.org/dist/Authen-SASL/
+    License: Perl Artistic and GPL
+  - Digest::SHA1 
+    http://search.cpan.org/dist/Digest-SHA1/
+    License: Perl Artistic and GPL
+
+
+Bundled 3rd Party Software
+A copy of Dojo Toolkit version 1.6.1 is included in the web code under
+web/dojo.
+Portions of the phpseclib (http://phpseclib.sourceforge.net) project are
+included in the web code under web/.ht-inc/phpseclib.
