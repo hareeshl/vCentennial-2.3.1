@@ -60,6 +60,101 @@ $printedHTMLheader = 0;
 /// \brief this is where globals get initialized
 ///
 ////////////////////////////////////////////////////////////////////////////////
+
+#added by mayank for vCentennial - start
+
+######## returns the balance for the current user #########
+function getUserBalance(){
+global $user;
+$iam = $user['id'];
+$balancequery = "SELECT balance FROM user where id = $iam" ;
+$balanceqh = doQuery($balancequery);
+$balance = mysql_fetch_assoc($balanceqh);
+return $balance['balance'];
+}
+
+
+function calculateReqCost($imgId, $startTime, $endTime){
+##need to check if it is a smartroom then give the sum of costs##
+$costquery = "SELECT cost FROM vcentresources where  id = $imgId" ;
+$costqh = doQuery($costquery);
+$cost = mysql_fetch_assoc($costqh);
+$unitCost =  $cost['cost'];
+#print "<br>Unit cost is $unitCost";
+$hours = round(abs($endTime - $startTime) / 3600, 2);
+#print "<br>Duration is $hours hours";
+$requestCost = $hours * $unitCost;
+#print "<br>Request Cost is $requestCost dollars";
+return $requestCost;
+}
+
+######## returns true if current user has sufficient balance to reserve the image for given duration #######
+function checkCredit($imgId, $startTime, $endTime){
+$balance = getUserBalance();
+#print "user balance is : $balance dollars";
+$requestCost = calculateReqCost($imgId, $startTime, $endTime);
+
+if($requestCost > $balance)
+  return false;
+else
+  return true;
+}
+
+######## inserts/updates transaction table vcenttrxn for a request id and deducts the balance from user account, also returns the amount that was deducted - can be used for notifications #####
+function insertOrUpdateTransaction($reqId){
+
+global $user;
+$iam = $user['id'];
+
+$existingReqCostQuery = "SELECT reqcost FROM vcenttrxn WHERE requestid = $reqId";
+$existingReqCostqh = doQuery($existingReqCostQuery);
+$newQuery = "";
+
+$requestTimeQuery = "SELECT start, end FROM request WHERE id=$reqId";
+$requestTimeqh = doQuery($requestTimeQuery);
+$requestTimeArray = mysql_fetch_assoc($requestTimeqh);
+$requestStartTime = $requestTimeArray['start'];
+#print "<br>hours = $requestStartTime";
+$requestEndTime = $requestTimeArray['end'];
+#print "<br>hours = $requestEndTime";
+$hours = round(abs(strtotime($requestEndTime) - strtotime($requestStartTime)) / 3600, 2);
+#print "<br>hours = $hours";
+
+$unitCostQuery = "SELECT SUM(cost) as 'unitcost' FROM vcentresources WHERE id IN ( SELECT imageid FROM reservation WHERE requestid = $reqId)";
+$unitCostqh = doQuery($unitCostQuery);
+$unitCostArray = mysql_fetch_assoc($unitCostqh);
+$unitCost =  $unitCostArray['unitcost'];
+#print "<br>unit cost = $unitCost";
+
+$requestCost = $hours * $unitCost;
+#print "<br>requestCost = $requestCost";
+
+$deductCost = 0;
+if(mysql_num_rows($existingReqCostqh)==0){
+#print "<br>does not exist";
+$newQuery = "INSERT INTO vcenttrxn(userid,requestid,reqcost) values($iam, $reqId, $requestCost)";
+$deductCost = $requestCost;
+}
+else{
+#print "<br>already exists";
+$existingReqCostArray = mysql_fetch_assoc($existingReqCostqh);
+$existingReqCost = $existingReqCostArray['reqcost'];
+$newQuery = "UPDATE vcenttrxn SET reqcost=$requestCost WHERE requestid = $reqId";
+$deductCost = $requestCost-$existingReqCost;
+}
+
+$deductBalanceQuery = "UPDATE user SET balance = balance - $deductCost WHERE id = $iam";
+
+#inserting or updating vcenttrxn (transaction) table
+doQuery($newQuery);
+#deducting balance from user acct
+doQuery($deductBalanceQuery);
+
+return $deductCost;
+}
+
+#added by mayank for vCentennial - end
+
 function initGlobals() {
 	global $mode, $user, $remoteIP, $authed, $oldmode, $semid;
 	global $semislocked, $days, $phpVer, $keys, $pemkey, $AUTHERROR;
