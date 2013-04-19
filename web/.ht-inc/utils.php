@@ -309,6 +309,17 @@ function initGlobals() {
 			require_once(".ht-inc/serverprofiles.php");
 			require_once(".ht-inc/requests.php");
 			break;
+		case 'addVcentResourcesPage':
+			require_once(".ht-inc/addVcentResourcesPage.php");
+			break;
+		case 'editVcentResourcesPage':
+			require_once(".ht-inc/editVcentResourcesPage.php");
+			$dojoRequires = array('dojo.parser');
+			break;
+		case 'usrBillingHistoryPage':
+			require_once(".ht-inc/usrBillingHistoryPage.php");
+			
+			break;
 		default:
 			require_once(".ht-inc/requests.php");
 	}
@@ -10478,6 +10489,18 @@ function getNavMenu($inclogout, $inchome, $homeurl=HOMEURL) {
 	$rt .= menulistLI('codeDocumentation');
 	$rt .= "<a href=\"" . DOCUMENTATIONURL . "\">";
 	$rt .= _("Documentation</a></li>\n");
+  
+  $rt .= menulistLI('addVcentResourcesPage');
+		$rt .= "<a href=\"" . BASEURL . SCRIPT . "?mode=addVcentResources\">";
+		$rt .= _("Add vCent Resources</a></li>\n");
+  
+  $rt .= menulistLI('editVcentResourcesPage');
+		$rt .= "<a href=\"" . BASEURL . SCRIPT . "?mode=editVcentResources\">";
+		$rt .= _("Edit vCent Resources</a></li>\n");
+  $rt .= menulistLI('usrBillingHistoryPage');
+		$rt .= "<a href=\"" . BASEURL . SCRIPT . "?mode=usrBillingHistory\">";
+		$rt .= _("View Billing History</a></li>\n");
+  
 	if($inclogout) {
 		$rt .= menulistLI('authentication');
 		$rt .= "<a href=\"" . BASEURL . SCRIPT . "?mode=logout\">";
@@ -10727,6 +10750,7 @@ function getDojoHTML($refresh) {
 			break;
 		case 'editMgmtNode':
 		case 'addMgmtNode':
+		case 'usrBillingHistory':
 		case 'confirmEditMgmtnode':
 		case 'confirmAddMgmtnode':
 			$filename = 'vclManagementNodes.js';
@@ -10946,7 +10970,25 @@ function getDojoHTML($refresh) {
 			$rt .= "   });\n";
 			$rt .= "</script>\n";
 			return $rt;
-
+		case "usrBillingHistory":
+			$rt .= "<link rel=\"stylesheet\" href=\"http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css\" />";
+			$rt .= "<script type=\"text/javascript\" src=\"http://code.jquery.com/jquery-1.9.1.js\"></script>";
+			$rt .= "<script type=\"text/javascript\" src=\"http://code.jquery.com/ui/1.10.2/jquery-ui.js\"></script>";
+			$rt .= "<script type=\"text/javascript\" src=\"./scripts/jquery.validate.js\"></script>";
+			$rt .= "<script type=\"text/javascript\" src=\"js/jquery.ui.datepicker.validation.js\"></script>";
+			$rt .= "<script type=\"text/javascript\">";
+			$rt .= "\$(function() {\$( \"#validBeforeDatepicker\" ).datepicker();});";
+			$rt .= "</script>";
+			$rt .= "<script type=\"text/javascript\">";
+			$rt .= "\$(function() {\$( \"#validAfterDatepicker\" ).datepicker();});";
+			$rt .= "</script>";
+			#$rt .= "<script type=\"text/javascript\">";
+			#$rt .= "\$(function(){\$('#validBeforeDatepicker,#validAfterDatepicker').datepicker();";
+            #$rt .= "\$('#validateForm').validate({";
+            #$rt .= "rules:{validTodayDatepicker:{required: true,dpDate: true}}});";
+			#$rt .= "});";
+			#$rt .= "</script>";
+			return $rt;
 		case "editSchedule":
 		case "submitAddSchedule":
 			$rt .= "<style type=\"text/css\">\n";
