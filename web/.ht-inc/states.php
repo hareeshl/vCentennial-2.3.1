@@ -56,6 +56,13 @@ $actions["entry"] = array('main',
                           'continuationsError',
                           'requestBlockAllocation',
                           'dashboard',
+                          'addVcentResources',
+						  'editVcentResources',
+                          'submitForm',
+						  'chooseResourceToEdit',
+						  'makeChangesToResources',
+						  'usrBillingHistory',
+						  'getBillingHistory',
 );
 
 $noHTMLwrappers = array('sendRDPfile',
@@ -191,6 +198,13 @@ $actions['pages']['main'] = "main";
 
 # new reservations
 $actions['mode']['newRequest'] = "newReservation"; # entry
+$actions['mode']['addVcentResources'] = "addVcentResourcesFunction";
+$actions['mode']['editVcentResources'] = "editVcentResourcesFunction";
+$actions['mode']['submitForm'] = "submitForm";
+$actions['mode']['chooseResourceToEdit']="chooseResourceToEdit";
+$actions['mode']['makeChangesToResources'] = "makeChangesToResources";
+$actions['mode']['usrBillingHistory'] = "forBillingHistory";
+$actions['mode']['getBillingHistory'] = "getTransaction";
 $actions['mode']['submitRequest'] = "submitRequest";
 $actions['mode']['AJupdateWaitTime'] = "AJupdateWaitTime";
 $actions['mode']['submitTestProd'] = "submitRequest";
@@ -198,6 +212,13 @@ $actions['mode']['selectTimeTable'] = "showTimeTable";
 $actions['mode']['AJshowRequestSuggestedTimes'] = "AJshowRequestSuggestedTimes";
 $actions['args']['selectTimeTable'] = 1;
 $actions['pages']['newRequest'] = "newReservations";
+$actions['pages']['addVcentResources'] = "addVcentResourcesPage";
+$actions['pages']['editVcentResources'] = "editVcentResourcesPage";
+$actions['pages']['submitForm'] = "addVcentResourcesPage";
+$actions['pages']['makeChangesToResources'] = "editVcentResourcesPage";
+$actions['pages']['chooseResourceToEdit'] = "editVcentResourcesPage";
+$actions['pages']['usrBillingHistory'] = "usrBillingHistoryPage";
+$actions['pages']['getBillingHistory'] = "usrBillingHistoryPage";
 $actions['pages']['submitRequest'] = "newReservations";
 $actions['pages']['AJupdateWaitTime'] = "newReservations";
 $actions['pages']['submitTestProd'] = "newReservations";
@@ -206,7 +227,7 @@ $actions['pages']['AJshowRequestSuggestedTimes'] = "newReservations";
 $actions['nextmodes']['newRequest'] = array();
 
 # current reservations
-$actions['mode']['viewRequests'] = "viewRequests"; # entry
+$actions['mode']['viewRequests'] = "viewRequests"; # entry   
 $actions['mode']['AJviewRequests'] = "viewRequests"; # entry
 $actions['mode']['AJeditRequest'] = "AJeditRequest";
 $actions['mode']['AJsubmitEditRequest'] = "AJsubmitEditRequest";
