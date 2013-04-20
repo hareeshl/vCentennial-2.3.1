@@ -90,6 +90,11 @@ function newReservation() {
 
 	$images = getImages();
 	$maxTimes = getUserMaxTimes();
+
+    foreach ($images as $id => $image){
+		$normalimageids[$id] = !$image["vcentennial"];  // a map vs vcentennial flag field.
+	}
+
 	if(! $imaging) {
 		print "<script language=javascript>\n";
 		print "var defaultMaxTime = {$maxTimes['initial']};\n";
@@ -135,7 +140,7 @@ function newReservation() {
 			print "queryExpr=\"*\${0}*\" highlightMatch=\"all\" autoComplete=\"false\" ";
 			print "name=imageid>\n";
 			foreach($resources['image'] as $id => $image) {
-				if($image == 'No Image')
+				if($image == 'No Image' || $normalimageids[$id] == 0)
 					continue;
 				if($id == $imageid)
 					print "        <option value=\"$id\" selected>$image</option>\n";
@@ -145,7 +150,7 @@ function newReservation() {
 			print "      </select>\n";
 		}
 		else
-			printSelectInput('imageid', $resources['image'], $imageid, 1, 0, 'imagesel', "onChange=\"selectEnvironment();\"");
+			printSelectInput('imageid', $resources['image'], $imageid, 1, 0, 'imagesel', "onChange=\"selectEnvironment();\"", $normalimageids);
 	}
 	print "<br><br>\n";
 

@@ -1389,6 +1389,7 @@ function getImages($includedeleted=0, $imageid=0) {
 	       .        "i.forcheckout, "
 	       .        "i.maxinitialtime, "
 	       .        "i.imagemetaid "
+           .        "i.vcentennial "
 	       . "FROM image i, "
 	       .      "platform p, "
 	       .      "OS o, "
@@ -7917,7 +7918,8 @@ function isImageBlockTimeActive($imageid) {
 /// \param $domid - (optional) use this to pass in the javascript id to be used
 /// for the select object
 /// \param $extra - (optional) any extra attributes that need to be set
-///
+/// \param $showimageids - (optional) any specific imageid's set to 0 will not get 
+///  displayed\n
 /// \brief prints out a select input part of a form\n
 /// it is assumed that if $selectedid is left off, we assume $dataArr has no 
 /// index '-1'\n
@@ -7925,7 +7927,7 @@ function isImageBlockTimeActive($imageid) {
 ///
 ////////////////////////////////////////////////////////////////////////////////
 function printSelectInput($name, $dataArr, $selectedid=-1, $skip=0, $multiple=0,
-                          $domid="", $extra="") {
+                          $domid="", $extra="", $showimageids=array()) {
 	if(! empty($domid))
 		$domid = "id=\"$domid\"";
 	if($multiple)
@@ -7937,7 +7939,7 @@ function printSelectInput($name, $dataArr, $selectedid=-1, $skip=0, $multiple=0,
 	else
 		print "      <select $multiple $domid $extra>\n";
 	foreach(array_keys($dataArr) as $id) {
-		if(($skip && $id == 4) || ($dataArr[$id] != 0 && empty($dataArr[$id])))
+		if(($skip && $id == 4) || ($dataArr[$id] != 0 && empty($dataArr[$id])) || ($showimageids[$id] == 0))
 			continue;
 		if($id == $selectedid)
 		   print "        <option value=\"$id\" selected=\"selected\">";
