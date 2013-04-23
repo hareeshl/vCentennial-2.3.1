@@ -106,6 +106,13 @@ $newstate = processInputVar("stateindex", ARG_NUMERIC);
 $newcostField = processInputVar("costField", ARG_NUMERIC);
 $editResourceQuery = " update vcentresources set smartroomid=$newsmartRoomId ,state=$newstate , cost=$newcostField where id=$selectedResId";
 $editResqh=doQuery($editResourceQuery);
+$subimagequery = "UPDATE subimages "
+		."set imagemetaid = "
+		."(select imagemetaid from image where id = "
+		."(select imageid from vcentSmartRoom where id = "
+		."$newsmartRoomId)) "
+		."where imageid = $selectedResId";
+doQuery($subimagequery);
 }
 
 

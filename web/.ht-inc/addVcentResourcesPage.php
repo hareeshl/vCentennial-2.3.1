@@ -7,21 +7,31 @@ $smartquery = "SELECT id"
         . " FROM vcentSmartRoom";
 $smartqh = doQuery($smartquery);
 #$result = mysql_fetch_array($smartqh);
+$prettyQuery = " select id as 'imageid', prettyname 
+from image
+where vcent = 1 and imagemetaid is null";
+#and imagemetaid NOT IN (select id from imagemeta where subimages = 1)";
 
-$result = array();
+$prettyqh = doQuery($prettyQuery);
+$types = array();
+$typeids = array();
 $ids = array();
 
 while($row = mysql_fetch_assoc($smartqh)){
   $ids[] = $row['id'];
 }
+while($typeRow = mysql_fetch_assoc($prettyqh)){
+$typeids[] = $typeRow['imageid'];
+$resourceType[] = $typeRow['prettyname'];
+}
 print " Adding a resource:";
 print "<form action = \"". BASEURL . SCRIPT . "\" method = 'post'>";
 print "<table> ". "<tr> " ."<td>";
-print " Select a resource type" . "</td>";
-$resourceType = array("camera" =>"Camera","microscope" =>"Microscope");
+print " Select image associated with resource" . "</td>";
+#$resourceType = array("camera" =>"Camera","microscope" =>"Microscope");
 print "<td>";
 printSelectInput("selectedResType1", $resourceType);
-$pass = array("resourceType" => $resourceType, "allSmartRooms" => $ids);
+$pass = array("resourceType" => $resourceType, "allSmartRooms" => $ids, "typeids" =>$typeids);
 $cont = addContinuationsEntry("submitForm",$pass);
 
 print "</td></tr><tr><td> <input type = hidden name=continuation value=\"$cont\">";
@@ -49,18 +59,15 @@ $userID = $data['userid'];
 #print "userid is $userID";
 #print $data 
 #$user['id'];	
-$selectedResType = processInputVar("selectedResType1", ARG_STRING);
+$selectedResType = processInputVar("selectedResType1", ARG_NUMERIC);
 $finalresdes  = processInputVar("resourcedescription", ARG_STRING);
 $selectedSmartRoom = processInputVar("selectedSmartRoom",ARG_NUMERIC);
 $cost1 = processInputVar("costField",ARG_STRING);
 print "cost1 value is " . "$cost1";
 $ids = $input_data["allSmartRooms"];
+$resImgTypeId = $input_data["typeids"];
 $resourceType = $input_data["resourceType"];
-
-if(! array_key_exists($selectedResType, $resourceType)) {
-      print "invalid option submitted\n";
-      return;
-   }
+print " test selectedres is $selectedResType";
    print "The option you selected was: ";
    print "$resourceType[$selectedResType]<br>\n";
 $selectquery = "SELECT MAX(id)"
@@ -71,15 +78,22 @@ $selectquery = "SELECT MAX(id)"
 	$newID = $oldID + 1;
 	print " The generated id is $newID ";
 $query = "INSERT INTO vcentresources "
-		. "(id, type, smartroomid, ownerID, des, cost) " 
+		. "(id,smartroomid, ownerID, des, cost, imageid) " 
 		. "VALUES " 
-	    . "($newID,'$resourceType[$selectedResType]', "
+	    . "($newID,"
 	       .       "$ids[$selectedSmartRoom],"
 		   .	   "$userID,"
 	       .       "'$finalresdes',"
-		   .	   "$cost1);";
+		   .	   "$cost1, $resImgTypeId[$selectedResType]);";
+$subimagequery = "INSERT INTO subimages "
+		."(imagemetaid, imageid) "
+		."values ( (select imagemetaid from image where id = "
+		."(select imageid from vcentSmartRoom where id = "
+		."$ids[$selectedSmartRoom])),"
+		."$resImgTypeId[$selectedResType])";
 		   
-  doQuery($query);
+ doQuery($query);
+ doQuery($subimagequery);
  
     
 }
